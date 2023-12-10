@@ -3,10 +3,12 @@
 # @Time    : 2023/12/10 19:09
 # @Desc    : 测试封装的 aiomysql
 import os
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 import aiomysql
 import pytest
 import pytest_asyncio
+
 from db import async_db
 
 
@@ -39,7 +41,6 @@ async def test_create_table(db_conn: async_db.AsyncMysqlDB):
     """
 
     rows: int = await db_conn.execute(table_sql)
-    print("------------------ rows:", rows)
     assert isinstance(rows, int) and (rows >= 0)
 
 

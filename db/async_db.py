@@ -4,8 +4,9 @@
 # @Desc    : aiomysql 异步增删改查的封装
 
 
+from typing import Any, Dict, List, Union
+
 import aiomysql
-from typing import Dict, Any, Union, List
 
 
 class AsyncMysqlDB:
