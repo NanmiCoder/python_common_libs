@@ -26,7 +26,9 @@ class AsyncMysqlDB:
                 data = await cur.fetchall()
                 return data or []
 
-    async def get_first(self, sql: str, *args: Union[str, int]) -> Union[Dict[str, Any], None]:
+    async def get_first(
+        self, sql: str, *args: Union[str, int]
+    ) -> Union[Dict[str, Any], None]:
         """
         从给定的 SQL 中查询记录，返回的是符合条件的第一个结果
         :param sql: 查询的sql
@@ -48,8 +50,8 @@ class AsyncMysqlDB:
         """
         fields = list(item.keys())
         values = list(item.values())
-        fieldstr = ','.join(fields)
-        valstr = ','.join(['%s'] * len(item))
+        fieldstr = ",".join(fields)
+        valstr = ",".join(["%s"] * len(item))
         sql = "INSERT INTO %s (%s) VALUES(%s)" % (table_name, fieldstr, valstr)
         async with self.__pool.acquire() as conn:
             async with conn.cursor(aiomysql.DictCursor) as cur:
@@ -57,8 +59,13 @@ class AsyncMysqlDB:
                 lastrowid = cur.lastrowid
                 return lastrowid
 
-    async def update_table(self, table_name: str, updates: Dict[str, Any], field_where: str,
-                           value_where: Union[str, int, float]) -> int:
+    async def update_table(
+        self,
+        table_name: str,
+        updates: Dict[str, Any],
+        field_where: str,
+        value_where: Union[str, int, float],
+    ) -> int:
         """
         更新指定表的记录
         :param table_name: 表名
@@ -70,14 +77,15 @@ class AsyncMysqlDB:
         upsets = []
         values = []
         for k, v in updates.items():
-            s = '%s=%%s' % k
+            s = "%s=%%s" % k
             upsets.append(s)
             values.append(v)
-        upsets = ','.join(upsets)
+        upsets = ",".join(upsets)
         sql = 'UPDATE %s SET %s WHERE %s="%s"' % (
             table_name,
             upsets,
-            field_where, value_where,
+            field_where,
+            value_where,
         )
         async with self.__pool.acquire() as conn:
             async with conn.cursor() as cur:
